@@ -1,8 +1,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <React/RCTBridge.h>
-#import <React/RCTEventDispatcher.h>
-#import <React/RCTLog.h>
+#import "RCTBridge.h"
+#import "RCTEventDispatcher.h"
+#import "RCTLog.h"
 
 #import "RCTFBLogin.h"
 #import "RCTFBLoginManager.h"
@@ -161,7 +161,8 @@ RCT_EXPORT_METHOD(loginWithPermissions:(NSArray *)permissions callback:(RCTRespo
       @"missingPermissions": missingPermissions
     };
     [self fireEvent:@"LoginFound" withData:loginData];
-    callback(@[[NSNull null], loginData]);
+    if(callback)
+        callback(@[[NSNull null], loginData]);
     return;
   }
 
@@ -173,10 +174,12 @@ RCT_EXPORT_METHOD(loginWithPermissions:(NSArray *)permissions callback:(RCTRespo
       [self fireEvent:@"Error" withData:@{
         @"description": error.localizedDescription
       }];
-      callback(@[error.localizedDescription, [NSNull null]]);
+      if(callback)
+        callback(@[error.localizedDescription, [NSNull null]]);
     } else if (result.isCancelled) {
       [self fireEvent:@"Cancel"];
-      callback(@[@"Cancel", [NSNull null]]);
+      if(callback)
+        callback(@[@"Cancel", [NSNull null]]);
     } else {
 
       NSArray *missingPermissions = [self getMissingPermissions:permissions];
@@ -188,7 +191,8 @@ RCT_EXPORT_METHOD(loginWithPermissions:(NSArray *)permissions callback:(RCTRespo
       };
 
       [self fireEvent:@"Login" withData:loginData];
-      callback(@[[NSNull null], loginData]);
+      if(callback)
+        callback(@[[NSNull null], loginData]);
 
       if (missingPermissions.count > 0) {
           NSDictionary *permissionData = @{
@@ -205,7 +209,8 @@ RCT_EXPORT_METHOD(logout:(RCTResponseSenderBlock)callback) {
   FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
   [login logOut];
   [self fireEvent:@"Logout"];
-  callback(@[[NSNull null], @"Logout"]);
+  if(callback)
+    callback(@[[NSNull null], @"Logout"]);
 }
 
 RCT_EXPORT_METHOD(getCredentials:(RCTResponseSenderBlock)callback) {
@@ -217,10 +222,12 @@ RCT_EXPORT_METHOD(getCredentials:(RCTResponseSenderBlock)callback) {
     };
 
     [self fireEvent:@"LoginFound" withData:loginData];
-    callback(@[[NSNull null], loginData]);
+    if(callback)
+        callback(@[[NSNull null], loginData]);
   } else {
     [self fireEvent:@"LoginNotFound"];
-    callback(@[@"LoginNotFound", [NSNull null]]);
+    if(callback)
+        callback(@[@"LoginNotFound", [NSNull null]]);
   }
 }
 

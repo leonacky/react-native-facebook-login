@@ -2,7 +2,7 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 #import "RCTFBLogin.h"
-#import <React/RCTLog.h>
+#import "RCTLog.h"
 
 @implementation RCTMFBLogin
 {
