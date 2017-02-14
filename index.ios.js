@@ -22,7 +22,6 @@ const  styles = StyleSheet.create({
   },
 });
 
-
 class FBLogin extends Component {
   constructor (props) {
     super(props);
